@@ -1,0 +1,7 @@
+node_modules
+.next
+.nextjs
+out
+.env*.local
+.env
+.vercel

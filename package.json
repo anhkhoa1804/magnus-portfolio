@@ -1,0 +1,21 @@
+{
+  "name": "magnus",
+  "private": true,
+  "workspaces": [
+    "web"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace web run dev",
+    "build:web": "npm --workspace web run build",
+    "start:web": "npm --workspace web run start",
+    "dev:hf": "powershell -ExecutionPolicy Bypass -File scripts/start-hf-local.ps1",
+    "hf:deploy": "powershell -ExecutionPolicy Bypass -File scripts/deploy-hf.ps1",
+    "dev": "npm run dev:web",
+    "build": "npm run build:web"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.36.2",
+    "cheerio": "^1.2.0",
+    "onnxruntime-web": "^1.24.2"
+  }
+}

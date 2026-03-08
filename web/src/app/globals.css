@@ -1,0 +1,179 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light Mode */
+  --bg: 210 20% 96%;
+  --bg-subtle: 210 15% 91%;
+  --fg: 220 15% 10%;
+  --fg-muted: 220 10% 45%;
+  --card: 0 0% 100%;
+  --card-fg: 220 15% 10%;
+  --border: 220 12% 82%;
+
+  --brand: 215 90% 50%;
+  --brand-fg: 0 0% 100%;
+
+  --pos: 142 70% 45%;
+  --pos-fg: 145 80% 10%;
+  --neg: 0 75% 55%;
+  --neg-fg: 0 0% 100%;
+
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* Dark Mode */
+  --bg: 240 10% 5%;
+  --bg-subtle: 240 10% 9%;
+  --fg: 220 20% 96%;
+  --fg-muted: 220 10% 60%;
+  --card: 240 8% 10%;
+  --card-fg: 220 20% 96%;
+  --border: 240 8% 20%;
+
+  --brand: 215 90% 62%;
+  --brand-fg: 0 0% 0%;
+
+  --pos: 142 60% 50%;
+  --pos-fg: 145 80% 10%;
+  --neg: 0 70% 60%;
+  --neg-fg: 0 0% 100%;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    @apply bg-bg text-fg antialiased selection:bg-brand/20 selection:text-brand;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Dot grid — visible on both modes */
+    background-image: radial-gradient(circle, hsl(var(--border) / 0.9) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+  }
+
+  /* Dark: extra ambient glow */
+  .dark body {
+    background-image:
+      radial-gradient(ellipse at 15% 55%, hsl(270 60% 20% / 0.12), transparent 30%),
+      radial-gradient(ellipse at 85% 25%, hsl(195 70% 20% / 0.10), transparent 30%),
+      radial-gradient(circle, hsl(var(--border) / 0.9) 1.2px, transparent 1.2px);
+    background-size: auto, auto, 24px 24px;
+  }
+
+  /* Highlight links in prose with brand color */
+  a.brand-link {
+    @apply text-brand hover:underline;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto px-4 md:px-8 max-w-7xl;
+  }
+
+  /* Unified bento card */
+  .bento-card {
+    @apply bg-card border border-border rounded-xl shadow;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.7s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  /* Shine sweep on hover */
+  .bento-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(
+      105deg,
+      transparent 20%,
+      hsl(var(--fg) / 0.05) 50%,
+      transparent 80%
+    );
+    transform: translateX(-160%) skewX(-12deg);
+    transition: transform 0.65s ease;
+  }
+  .bento-card:hover::after {
+    transform: translateX(160%) skewX(-12deg);
+  }
+  .bento-card:hover {
+    border-color: hsl(var(--fg) / 0.22);
+    box-shadow:
+      0 0 0 1px hsl(var(--fg) / 0.06),
+      0 0 20px -4px hsl(var(--fg) / 0.1),
+      0 8px 24px -8px hsl(var(--fg) / 0.08);
+  }
+  .dark .bento-card {
+    @apply shadow-none;
+  }
+  .dark .bento-card:hover {
+    border-color: hsl(var(--fg) / 0.14);
+    box-shadow:
+      0 0 0 1px hsl(var(--fg) / 0.07),
+      0 0 28px -4px hsl(var(--fg) / 0.09);
+  }
+
+  /* Coloured bento cards — pastel palette, dark text for contrast */
+  .bento-orange {
+    background-color: hsl(28 100% 68% / 0.85) !important;
+    --fg: 22 80% 7%;
+    --fg-muted: 24 50% 22%;
+    --border: 27 72% 52%;
+    --card: 28 100% 68%;
+  }
+  .dark .bento-orange {
+    background-color: hsl(26 80% 44% / 0.92) !important;
+    --fg: 28 70% 98%;
+    --fg-muted: 28 45% 82%;
+    --border: 27 60% 60%;
+    --card: 26 80% 44%;
+  }
+  .bento-blue {
+    background-color: hsl(222 90% 68% / 0.85) !important;
+    --fg: 220 75% 7%;
+    --fg-muted: 220 45% 20%;
+    --border: 222 65% 52%;
+    --card: 222 90% 68%;
+  }
+  .dark .bento-blue {
+    background-color: hsl(222 72% 42% / 0.92) !important;
+    --fg: 220 75% 98%;
+    --fg-muted: 220 45% 82%;
+    --border: 222 58% 60%;
+    --card: 222 72% 42%;
+  }
+
+  /* Header — own dot background so nav stays readable while scrolling */
+  .header-bg {
+    background-color: hsl(var(--bg));
+    background-image: radial-gradient(circle, hsl(var(--border) / 0.9) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+  }
+}
+
+@keyframes soundbar {
+  0%, 100% { transform: scaleY(0.3); }
+  50%       { transform: scaleY(1);   }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-card/60 backdrop-blur-xl border border-border/50 shadow-sm;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,0 +1,51 @@
+# Vercel Ignore - Don't upload these to Vercel
+
+# Development
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Testing
+.coverage
+*.test.ts
+*.spec.ts
+__tests__/
+
+# Local env (use Vercel env vars instead)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build artifacts
+.next/
+out/
+.cache/
+
+# Dependencies (will be installed during build)
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Documentation (not needed for runtime)
+*.md
+!README.md
+
+# Other services (not part of frontend)
+/ai-service
+/backend
+/gradio
+/frontend
+
+# Config files
+.eslintrc.json
+.prettierrc
+tsconfig.tsbuildinfo
