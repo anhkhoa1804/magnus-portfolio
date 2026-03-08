@@ -26,34 +26,25 @@ except ImportError:
     PANDAS_AVAILABLE = False
     logging.warning("pandas/numpy not available - price prediction disabled")
 
-# Import ML/AI libraries
-try:
-    from prophet import Prophet
-    PROPHET_AVAILABLE = True
-except ImportError:
-    PROPHET_AVAILABLE = False
+# Check ML/AI library availability WITHOUT importing them at module level.
+# Heavy imports (transformers, ultralytics) trigger background network calls to
+# huggingface.co and api.ultralytics.com which can fail during HF Space init.
+import importlib.util as _iutil
+
+PROPHET_AVAILABLE = _iutil.find_spec('prophet') is not None
+if not PROPHET_AVAILABLE:
     logging.warning("Prophet not available - price prediction disabled")
 
-try:
-    from transformers import pipeline
-    TRANSFORMERS_AVAILABLE = True
-except ImportError:
-    TRANSFORMERS_AVAILABLE = False
+TRANSFORMERS_AVAILABLE = _iutil.find_spec('transformers') is not None
+if not TRANSFORMERS_AVAILABLE:
     logging.warning("Transformers not available - translation disabled")
 
-try:
-    from ultralytics import YOLO
-    import cv2
-    YOLO_AVAILABLE = True
-except ImportError:
-    YOLO_AVAILABLE = False
+YOLO_AVAILABLE = _iutil.find_spec('ultralytics') is not None
+if not YOLO_AVAILABLE:
     logging.warning("YOLO not available - object detection disabled")
 
-try:
-    import whisper as openai_whisper
-    WHISPER_AVAILABLE = True
-except ImportError:
-    WHISPER_AVAILABLE = False
+WHISPER_AVAILABLE = _iutil.find_spec('whisper') is not None
+if not WHISPER_AVAILABLE:
     logging.warning("Whisper not available - IELTS speaking transcription disabled")
 
 # Ensure ffmpeg is on PATH (needed by Whisper for audio decoding)
@@ -314,6 +305,7 @@ def predict_price():
         df = prepare_prophet_dataframe(prices)
         
         # Train Prophet model
+        from prophet import Prophet
         model = Prophet(
             changepoint_prior_scale=0.05,
             seasonality_mode='multiplicative',
@@ -925,6 +917,7 @@ def ielts_speaking():
 
             try:
                 logger.info(f"Transcribing audio file: {audio_file.filename} ({suffix})")
+                import whisper as openai_whisper
                 model = openai_whisper.load_model("base")
                 result_whisper = model.transcribe(tmp_path)
                 transcript = result_whisper["text"].strip()
