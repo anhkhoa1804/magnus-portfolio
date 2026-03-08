@@ -1,0 +1,44 @@
+# Magnus AI Backend - Full Featured
+# ==================================================
+# Core Web Framework
+# ==================================================
+flask>=3.0.0
+flask-cors>=4.0.0
+gunicorn>=21.2.0
+
+# ==================================================
+# Time Series Forecasting (Prophet for Price Prediction)
+# ==================================================
+prophet>=1.1.5
+pandas>=2.1.0
+numpy>=1.24.0,<2.0.0
+scikit-learn>=1.3.0
+
+# ==================================================
+# NLP Translation (German -> English)
+# ==================================================
+transformers>=4.36.0
+sentencepiece>=0.1.99
+torch>=2.1.0
+torchvision>=0.16.0
+
+# ==================================================
+# Object Detection (YOLOv8)
+# ==================================================
+ultralytics>=8.0.0
+opencv-python-headless>=4.8.0
+Pillow>=10.0.0
+
+# ==================================================
+# Utilities
+# ==================================================
+python-dotenv>=1.0.0
+requests>=2.31.0
+groq>=1.0.0  # Groq AI API for chat
+
+# ==================================================
+# Optional: Advanced Features (commented out for faster build)
+# ==================================================
+# gradio>=4.40.0  # Web UI (not needed, using Flask)
+# llama-cpp-python>=0.2.27  # Phi-3 chat (very slow to build)
+# edge-tts>=6.1.9  # Text-to-speech (optional)
