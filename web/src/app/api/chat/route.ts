@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchKnowledge } from '@/data/knowledgeBase';
 
-const AI_BACKEND_URL = process.env.AI_BACKEND_URL;
+const _rawBackendUrl = process.env.AI_BACKEND_URL;
+const AI_BACKEND_URL = (!_rawBackendUrl || _rawBackendUrl.startsWith('http://localhost'))
+  ? 'https://anhkhoa1804-magnus-ai-backend.hf.space'
+  : _rawBackendUrl;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 async function callGroq(messages: { role: string; content: string }[]) {
@@ -40,17 +43,21 @@ Please answer the user's question using the provided context. If the question is
     // Try HuggingFace Space backend first
     if (AI_BACKEND_URL) {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
         const response = await fetch(`${AI_BACKEND_URL}/api/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ query: augmentedQuery, conversation_history: conversation_history || [] }),
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
         if (response.ok) {
           const data = await response.json();
-          return NextResponse.json(data);
+          if (data?.success !== undefined) return NextResponse.json(data);
         }
       } catch {
-        // Backend unavailable — fall through to Groq
+        // Backend unavailable or timed out — fall through to Groq
       }
     }
 

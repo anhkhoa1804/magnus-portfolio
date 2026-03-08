@@ -34,27 +34,7 @@ export async function GET(request: Request) {
     const accessKey = process.env.UNSPLASH_ACCESS_KEY;
     
     if (!accessKey) {
-      // Return placeholder images if no API key
-      return NextResponse.json({
-        success: true,
-        photos: Array.from({ length: count }, (_, i) => ({
-          id: `placeholder-${i}`,
-          urls: {
-            regular: `https://images.unsplash.com/photo-${1600000000000 + i * 1000}?w=1080&q=80`,
-            small: `https://images.unsplash.com/photo-${1600000000000 + i * 1000}?w=400&q=80`,
-            thumb: `https://images.unsplash.com/photo-${1600000000000 + i * 1000}?w=200&q=80`,
-          },
-          alt_description: `${query} image ${i + 1}`,
-          description: null,
-          user: {
-            name: 'Unsplash',
-            username: 'unsplash',
-          },
-          links: {
-            html: 'https://unsplash.com',
-          },
-        })),
-      });
+      return NextResponse.json({ success: false, photos: [], error: 'Unsplash API key not configured' });
     }
 
     // Fetch from Unsplash API
@@ -88,31 +68,6 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error('Unsplash fetch error:', error);
-    
-    // Fallback to placeholder images
-    const { searchParams } = new URL(request.url);
-    const query = searchParams.get('query') || 'technology';
-    const count = Math.min(parseInt(searchParams.get('count') || '10'), 30);
-    
-    return NextResponse.json({
-      success: true,
-      photos: Array.from({ length: count }, (_, i) => ({
-        id: `placeholder-${i}`,
-        urls: {
-          regular: `https://images.unsplash.com/photo-${1600000000000 + i * 1000}?w=1080&q=80`,
-          small: `https://images.unsplash.com/photo-${1600000000000 + i * 1000}?w=400&q=80`,
-          thumb: `https://images.unsplash.com/photo-${1600000000000 + i * 1000}?w=200&q=80`,
-        },
-        alt_description: `${query} image ${i + 1}`,
-        description: null,
-        user: {
-          name: 'Unsplash',
-          username: 'unsplash',
-        },
-        links: {
-          html: 'https://unsplash.com',
-        },
-      })),
-    });
+    return NextResponse.json({ success: false, photos: [], error: 'Failed to fetch photos' });
   }
 }

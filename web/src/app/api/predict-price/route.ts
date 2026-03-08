@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const AI_BACKEND_URL = process.env.AI_BACKEND_URL;
+const _rawBackendUrl = process.env.AI_BACKEND_URL;
+const AI_BACKEND_URL = (!_rawBackendUrl || _rawBackendUrl.startsWith('http://localhost'))
+  ? 'https://anhkhoa1804-magnus-ai-backend.hf.space'
+  : _rawBackendUrl;
 
 export async function POST(req: NextRequest) {
   try {

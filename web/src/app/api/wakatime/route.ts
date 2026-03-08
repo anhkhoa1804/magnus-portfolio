@@ -11,7 +11,7 @@ interface WakaTimeStats {
 export async function GET() {
   const apiKey = process.env.WAKATIME_API_KEY;
   if (!apiKey) {
-    return NextResponse.json({ success: false, error: 'WakaTime key not configured' }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'WakaTime key not configured' });
   }
 
   try {
