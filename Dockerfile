@@ -19,11 +19,12 @@ RUN apt-get update && apt-get install -y \
 # Copy requirements first (for Docker layer caching)
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies and pre-download YOLO model
+RUN pip install --no-cache-dir -r requirements.txt && \
+    python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')"
 
-# Copy application code and bundled model
-COPY app.py utils.py yolov8n.pt ./
+# Copy application code
+COPY app.py utils.py ./
 
 # Expose port (HuggingFace uses 7860)
 EXPOSE 7860
