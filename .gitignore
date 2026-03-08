@@ -46,3 +46,5 @@ Thumbs.db
 .vscode
 hf-space/.env
 hf-space/.venv/
+
+hf-space/yolov8n.pt

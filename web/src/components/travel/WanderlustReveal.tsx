@@ -10,7 +10,7 @@ export function WanderlustReveal({ children, className = '' }: { children: React
       initial={{ opacity: 0, y: 80, scale: 0.97 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.7, ease: 'easeOut' }}
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.05 }}
     >
       {children}
     </motion.div>

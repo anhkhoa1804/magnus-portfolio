@@ -43,7 +43,7 @@ export default function WanderlustPage() {
       </WanderlustReveal>
 
       {/* Photo gallery bento */}
-      <WanderlustReveal>
+      <div>
         <div className="space-y-4">
           <div className="text-center mb-10">
             <h2 className="text-[clamp(2rem,4vw,3rem)] font-heading font-bold leading-tight tracking-tight text-fg">
@@ -53,7 +53,7 @@ export default function WanderlustPage() {
           </div>
           <PhotoGallery />
         </div>
-      </WanderlustReveal>
+      </div>
     </main>
   );
 }

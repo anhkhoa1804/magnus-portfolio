@@ -97,6 +97,14 @@ export function TravelMap({ region = 'vietnam' }: { region?: 'vietnam' | 'europe
           // Add compact attribution only
           map.current.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
 
+          // Catch style/tile auth errors (e.g. Mapbox token domain restrictions)
+          map.current.on('error', (e) => {
+            const status = (e.error as any)?.status;
+            if (status === 401 || status === 403) {
+              setError('Map tiles blocked – check Mapbox token domain restrictions at account.mapbox.com → Tokens.');
+            }
+          });
+
           // Watch for theme changes and update map style
           const themeObserver = new MutationObserver(() => {
             if (map.current) {
