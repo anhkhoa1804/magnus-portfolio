@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { searchKnowledge } from '@/data/knowledgeBase';
 
 const _rawBackendUrl = process.env.AI_BACKEND_URL;
-const AI_BACKEND_URL = (!_rawBackendUrl || _rawBackendUrl.startsWith('http://localhost'))
+const AI_BACKEND_URL = !_rawBackendUrl
   ? 'https://anhkhoa1804-magnus-ai-backend.hf.space'
   : _rawBackendUrl;
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
