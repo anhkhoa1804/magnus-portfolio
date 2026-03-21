@@ -224,12 +224,6 @@ def chat():
             # Extract response
             generated_text = result["choices"][0]["message"]["content"]
             
-            return jsonify({
-                "success": True,
-                "response": generated_text,
-                "model": "llama-3.3-70b-versatile",
-                "timestamp": datetime.now().isoformat()
-            })
             
         except Exception as groq_error:
             logger.warning(f"Groq API failed: {groq_error}, using fallback")
@@ -1126,6 +1120,81 @@ def not_found(e):
 
 @app.errorhandler(500)
 def internal_error(e):
+
+
+@app.route('/api/ielts-tts', methods=['POST'])
+def ielts_tts():
+    """
+    Phase 5: Text-to-Speech for IELTS questions
+    Converts question text to speech using pyttsx3 (offline, free)
+    
+    Request: { "text": "Describe a person who...", "output_format": "mp3" }
+    Response: Audio stream or base64-encoded audio
+    """
+    try:
+        from audio_utils import generate_speech_from_text
+    except ImportError:
+        logger.warning("audio_utils not available for TTS")
+        return jsonify({
+            "success": False,
+            "error": "TTS module not available"
+        }), 500
+    
+    try:
+        data = request.json or {}
+        text = data.get('text', '').strip()
+        output_format = data.get('output_format', 'mp3')
+        
+        if not text or len(text) < 5:
+            return jsonify({
+                "success": False,
+                "error": "Text required (minimum 5 characters)"
+            }), 400
+        
+        logger.info(f"Phase 5: Generating TTS for {len(text)} chars")
+        
+        # Generate speech
+        tts_result = generate_speech_from_text(text)
+        
+        if not tts_result.get("success"):
+            return jsonify({
+                "success": False,
+                "error": tts_result.get("error", "TTS generation failed")
+            }), 500
+        
+        output_path = tts_result.get("output_path")
+        
+        # Return as downloadable file or base64
+        if output_format == "base64":
+            import base64
+            with open(output_path, 'rb') as f:
+                audio_b64 = base64.b64encode(f.read()).decode('utf-8')
+            
+            return jsonify({
+                "success": True,
+                "audio_base64": audio_b64,
+                "duration": tts_result.get("estimated_duration"),
+                "format": "base64"
+            })
+        
+        else:
+            # Return as file stream
+            from flask import send_file
+            return send_file(
+                output_path,
+                mimetype='audio/mpeg',
+                as_attachment=True,
+                download_name='question.mp3'
+            )
+    
+    except Exception as e:
+        logger.error(f"IELTS TTS error: {e}")
+        return jsonify({
+            "success": False,
+            "error": extract_error_message(e)
+        }), 500
+
+
     logger.error(f"Internal error: {e}")
     return jsonify({
         "success": False,

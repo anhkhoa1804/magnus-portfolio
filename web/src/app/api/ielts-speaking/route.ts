@@ -50,6 +50,14 @@ export async function POST(req: NextRequest) {
     const scores = data?.scores || evaluation?.band_scores || {};
     const overall = Number(data?.overall_band ?? evaluation?.overall_band ?? 0);
 
+   // Process fluency metrics from Phase 1
+   const fluencyMetrics = data?.fluency_metrics || {};
+   const speakingTime = fluencyMetrics.total_duration || 0;
+   const pauseCount = fluencyMetrics.pause_count || 0;
+
+   // Process lexical metrics from Phase 1
+   const lexicalMetrics = data?.lexical_metrics || {};
+
     return NextResponse.json({
       success: true,
       assessment: {
@@ -62,8 +70,8 @@ export async function POST(req: NextRequest) {
         },
         transcription: transcript,
         wordCount,
-        speakingTime: 0,
-        pauseCount: 0,
+        speakingTime: Math.round(speakingTime),
+        pauseCount,
         strengths: Array.isArray(evaluation?.strengths) ? evaluation.strengths : [],
         weaknesses: Array.isArray(evaluation?.improvements) ? evaluation.improvements : [],
         suggestions: Array.isArray(evaluation?.suggestions)
@@ -72,6 +80,12 @@ export async function POST(req: NextRequest) {
           ? [evaluation.suggestions]
           : [],
       },
+     // NEW: Pass through enhanced metrics for frontend display
+     metrics: {
+       fluency_metrics: fluencyMetrics,
+       lexical_metrics: lexicalMetrics,
+       pronunciation_metrics: data?.pronunciation_metrics
+     }
     });
   } catch (error: any) {
     console.error('IELTS Speaking API Error:', error);

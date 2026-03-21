@@ -42,3 +42,11 @@ groq>=1.0.0  # Groq AI API for chat
 # gradio>=4.40.0  # Web UI (not needed, using Flask)
 # llama-cpp-python>=0.2.27  # Phi-3 chat (very slow to build)
 # edge-tts>=6.1.9  # Text-to-speech (optional)
+
+# ==================================================
+# IELTS System Enhancement (Phases 1-5)
+# ==================================================
+openai-whisper>=20240314  # Phase 1: ASR with fluency metrics
+librosa>=0.10.0  # Phase 1: Audio analysis for WPM/pauses
+pyttsx3>=2.90  # Phase 5: Text-to-speech (offline)
+torchaudio>=2.1.0  # Phase 3: Wav2Vec audio processing
