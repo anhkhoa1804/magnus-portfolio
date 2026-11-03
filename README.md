@@ -12,22 +12,23 @@ Personal portfolio — AI experiments, writing, and travel.
 ## Structure
 
 ```
-d:\pi\
-├── web/            # Next.js 15 frontend → Vercel
+magnus/
+├── web/                 # Next.js 15 frontend (Vercel), npm workspace "web"
 │   ├── src/
-│   │   ├── app/          # App Router pages & API routes
-│   │   ├── components/   # UI components
-│   │   ├── lib/          # Utilities, cache, metadata
-│   │   └── data/         # Static data (knowledge base, coding problems)
+│   │   ├── app/         # App Router pages & API routes
+│   │   ├── components/  # UI components
+│   │   ├── lib/         # Utilities, cache, metadata
+│   │   └── data/        # Static data (knowledge base, coding problems)
 │   ├── content/
-│   │   ├── garden/       # MDX essays
-│   │   ├── german/       # German content
-│   │   └── wanderlust/   # Travel entries
-│   └── public/           # Static assets
-└── hf-space/       # Flask AI backend → HuggingFace Spaces
-    ├── app.py
-    ├── Dockerfile
-    └── requirements.txt
+│   │   ├── garden/      # MDX essays
+│   │   ├── german/      # German content
+│   │   └── wanderlust/  # Travel entries
+│   └── public/          # Static assets
+├── hf-space/            # Flask AI backend (Hugging Face Spaces, Docker)
+│   ├── app.py
+│   ├── Dockerfile
+│   └── requirements.txt
+└── package.json         # npm workspace root (workspaces: ["web"])
 ```
 
 ---

@@ -48,3 +48,6 @@ hf-space/.env
 hf-space/.venv/
 
 hf-space/yolov8n.pt
+
+# runtime error log (generated)
+hf-space/flask_err.txt
