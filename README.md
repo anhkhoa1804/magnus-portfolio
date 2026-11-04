@@ -39,7 +39,7 @@ magnus/
 |---|---|
 | `/` | Home — hero + live bento dashboard |
 | `/garden` | MDX essays and notes |
-| `/project` | AI lab (code sandbox, IELTS, chat, doodle classifier, price prediction) |
+| `/project` | AI lab: AI roaster, chat, code sandbox, doodle classifier, IELTS, stock price predictions |
 | `/german` | German news feed (Tagesschau) |
 | `/wanderlust` | Travel maps (Mapbox) + photo gallery |
 | `/search` | Full-text search |
@@ -72,8 +72,8 @@ npm install
 # Frontend dev server (http://localhost:3000)
 npm run dev:web
 
-# Node.js API server
-npm run dev:api
+# Local Flask AI backend (Windows PowerShell; see hf-space/)
+npm run dev:hf
 ```
 
 Create `web/.env.local`:
@@ -109,9 +109,7 @@ RESEND_API_KEY=
 git push origin main   # auto-deploys via GitHub integration
 ```
 
-**AI Backend → HuggingFace Spaces:**
+**AI Backend → HuggingFace Spaces (Docker):**
 ```bash
-# Push hf-space/ contents to your HF Space repo
-cd hf-space
-git push hf main
+npm run hf:deploy   # pushes hf-space/ as a subtree to the "hf-space" remote (scripts/deploy-hf.ps1)
 ```
